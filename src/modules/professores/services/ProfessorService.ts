@@ -7,9 +7,9 @@ export class ProfessorService {
   constructor(private professorRepository: IProfessorRepository) {}
 
   async listarTodos(): Promise<Omit<Professor, 'senha_hash'>[]> {
-    const professores = await this.professorRepository.findAll()
+    const profesores = await this.professorRepository.findAll()
     // Ajustado o map para remover a senha de forma limpa e segura
-    return professores.map(prof => {
+    return profesores.map(prof => {
       const { senha_hash, ...resto } = prof
       return resto
     })
@@ -43,9 +43,10 @@ export class ProfessorService {
     const senhaCorreta = await bcrypt.compare(senha, professor.senha_hash)
     if (!senhaCorreta) throw new Error('Credenciais inválidas')
 
+    // 🔒 Protegido contra falhas do .env usando a string padrão como fallback
     const token = jwt.sign(
       { id: professor.id_professor, email: professor.email },
-      process.env.JWT_SECRET as string,
+      process.env.JWT_SECRET || 'chave_secreta_super_segura_tcc',
       { expiresIn: '8h' }
     )
 
