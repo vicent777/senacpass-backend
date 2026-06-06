@@ -9,12 +9,8 @@ export class AlunoRepository implements IAlunoRepository {
         return await this.repository.findOneBy({ id_aluno: id })
     }
 
-    async findByEmail(email: string): Promise<Aluno> {
-        const aluno = await this.repository.findOneBy({ email });
-        if (!aluno) {
-            throw new Error('Email não encontrado');
-        }
-        return aluno;
+    async findByEmail(email: string): Promise<Aluno | null> {
+    return this.repository.findOne({ where: { email } });
     }
 
     async findByMatricula(matricula: string): Promise<Aluno | null> {

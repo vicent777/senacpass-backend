@@ -12,7 +12,8 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction):
   const token = authHeader.split(' ')[1]
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string)
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'chave_secreta_super_segura_tcc')
+    
     ;(req as any).professor = decoded
     next()
   } catch {
